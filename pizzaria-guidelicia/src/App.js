@@ -1,0 +1,61 @@
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import "./App.css";
+import Header from "./components/header";
+import SecaoCapa from "./components/SecaoCapa";
+import Produtos from "./components/Produtos";
+import Sobre from "./components/Sobre";
+import Create from "./components/createcheck";
+import Logar from "./components/entrar";
+import ScrollToTopButton from './components/TopButton/ScrollToTopButton';
+import Account from "./components/principal/p";
+import FinalizarPedido from "./components/Finalizar/finalizar"; // ajuste o caminho conforme sua pasta
+
+function ScrollToHashElement() {
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [hash]);
+
+  return null;
+}
+
+function App() {
+  const [carrinho, setCarrinho] = useState([]);
+
+  return (
+    <Router>
+      <div className="App">
+        <ScrollToHashElement />
+        <Header />
+        <ScrollToTopButton />
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <SecaoCapa />
+                <Produtos carrinho={carrinho} setCarrinho={setCarrinho} />
+                <Sobre />
+              </>
+            }
+          />
+          <Route path="/createcheck" element={<Create />} />
+          <Route path="/entrar" element={<Logar />} />
+          <Route path="/p" element={<Account />} />
+          <Route path="/finalizar" element={<FinalizarPedido carrinho={carrinho} setCarrinho={setCarrinho} />} />
+          </Routes>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
